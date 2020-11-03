@@ -2,6 +2,7 @@ var express = require('express'); // Express contains some boilerplate to for ro
 var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http); // Here's where we include socket.io as a node module 
+const PORT = process.env.PORT || 5000;
 
 // Serve the index page 
 app.get("/", function (request, response) {
@@ -9,7 +10,7 @@ app.get("/", function (request, response) {
 });
 
 // Listen on port 5000
-app.set('port', (process.env.PORT || 5000));
+app.set('port', (PORT));
 http.listen(app.get('port'), function(){
   console.log('listening on port',app.get('port'));
 });
