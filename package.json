@@ -7,9 +7,12 @@
   "start": "node app.js"
 },
   "dependencies": {
-      "express": "~2.5.8",
-      "socket.io": "~0.9.6"
-},
+    "express": "^4.15.2",
+    "socket.io": "^2.0.1"
+  },
+  "engines": {
+    "node": "6.10.x"
+  },
   "repository": {
   "type": "git",
   "url": ""
