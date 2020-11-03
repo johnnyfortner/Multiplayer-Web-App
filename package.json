@@ -6,14 +6,18 @@
   "scripts": {
   "start": "node app.js"
 },
+  "dependencies": {
+      "express": "~2.5.8",
+      "socket.io": "~0.9.6"
+},
   "repository": {
   "type": "git",
   "url": ""
 },
-  "author": "",
+  "author": "Ingenious Entertainment",
   "license": "ISC",
   "bugs": {
   "url": ""
 },
-  "homepage": ""
+  "homepage": "https://github.com/johnnyfortner/IngeniousEntertainment"
 }
