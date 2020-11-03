@@ -10,9 +10,6 @@
     "express": "^4.15.2",
     "socket.io": "^2.0.1"
   },
-  "engines": {
-    "node": "6.10.x"
-  },
   "repository": {
   "type": "git",
   "url": ""
