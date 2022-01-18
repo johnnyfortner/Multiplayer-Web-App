@@ -1,2 +1,2 @@
 # Multiplayer-Web-App
-This is the proof of concept
+This is a proof of concept
