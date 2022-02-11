@@ -166,6 +166,7 @@
 				serverflash.rotation = playerInfo.angle;
 				serverflash.alpha = 1;
 				serverflash_array.push(serverflash);
+				return serverflash;
 			}
 			
 			function createTile(self,xx,yy,alpha,type){
@@ -285,7 +286,7 @@
 				 if(server_bullet_array[i].owner_id !== socket.id)
 				 {
                       if(bullet_array[i] == undefined){
-						  addOtherFlash(self,server_bullet_array[i]);
+						  var f = addOtherFlash(self,server_bullet_array[i]);
                           bullet_array[i]=addOtherBullets(self,server_bullet_array[i]);
 						//serverflash = addOtherFlash(self,server_bullet_array[i]);
 						//var serverflash = addOtherFlash(self,server_bullet_array[i]);
@@ -372,12 +373,13 @@
 			flash.y = player.sprite.y;
 			}
 		if(flash.alpha<=0){
+		flash.destroy();
 		flash_array.splice(i,1);
 		i--;
-		flash.destroy();
 		}
 		}
 	}
+	//if(serverflash_array == defined){
 		for(var i=0;i<serverflash_array.length;i++){
 		var sflash = serverflash_array[i];
 		if(sflash.alpha>0){
@@ -386,10 +388,11 @@
 			//sflash.y = serverflash_array[i].y;
 			}
 		if(sflash.alpha<=0){
+		sflash.destroy();
 		serverflash_array.splice(i,1);
 		i--;
-		sflash.destroy();
 		}
+		//}
 	}
 		
 	//Simple Collision Detection System
@@ -438,6 +441,55 @@
 					var dist = Phaser.Math.Distance.Between(tile.x,tile.y-16,player.sprite.x,player.sprite.y);
 				if(dist<32){
 					player.speed_y -= Math.sin(  Math.PI/2)* player.speed;
+				}
+			}
+		}
+	}
+	//Diagonal Collision detection//
+	if (this.cursors.left.isDown && this.cursors.down.isDown){
+			for(var i=0;i<=water_tiles.length;i++){
+				if(water_tiles[i] != undefined){
+					var tile = water_tiles[i];
+					var dist = Phaser.Math.Distance.Between(tile.x+8,tile.y-8,player.sprite.x,player.sprite.y);
+				if(dist<16){
+					player.speed_x += Math.cos(( - 90) + Math.PI/2) * player.speed / 2;
+					player.speed_y -= Math.sin(  Math.PI/2)* player.speed / 2;
+				}
+			}
+		}
+	}
+	if (this.cursors.left.isDown && this.cursors.up.isDown){
+			for(var i=0;i<=water_tiles.length;i++){
+				if(water_tiles[i] != undefined){
+					var tile = water_tiles[i];
+					var dist = Phaser.Math.Distance.Between(tile.x+8,tile.y+8,player.sprite.x,player.sprite.y);
+				if(dist<16){
+					player.speed_x += Math.cos(( - 90) + Math.PI/2) * player.speed / 2;
+					player.speed_y += Math.sin(  Math.PI/2)* player.speed / 2;
+				}
+			}
+		}
+	}
+	if (this.cursors.right.isDown && this.cursors.up.isDown){
+			for(var i=0;i<=water_tiles.length;i++){
+				if(water_tiles[i] != undefined){
+					var tile = water_tiles[i];
+					var dist = Phaser.Math.Distance.Between(tile.x-8,tile.y+8,player.sprite.x,player.sprite.y);
+				if(dist<16){
+					player.speed_x -= Math.cos(( - 90) + Math.PI/2) * player.speed / 2;
+					player.speed_y += Math.sin(  Math.PI/2)* player.speed / 2;
+				}
+			}
+		}
+	}
+	if (this.cursors.right.isDown && this.cursors.down.isDown){
+			for(var i=0;i<=water_tiles.length;i++){
+				if(water_tiles[i] != undefined){
+					var tile = water_tiles[i];
+					var dist = Phaser.Math.Distance.Between(tile.x-8,tile.y-8,player.sprite.x,player.sprite.y);
+				if(dist<16){
+					player.speed_x -= Math.cos(( - 90) + Math.PI/2) * player.speed / 2;
+					player.speed_y -= Math.sin(  Math.PI/2)* player.speed / 2;
 				}
 			}
 		}
@@ -492,6 +544,7 @@
 			playerBullet_array.splice(i,1);
 			i--;
 			console.log('bullet deleted');
+			socket.emit('del-bul',playerBullet_array);
 		}
 		for(j=0;j<water_tiles.length;j++){
 			var dist = Phaser.Math.Distance.Between(bullet.x,bullet.y,water_tiles[j].x,water_tiles[j].y);
@@ -500,6 +553,7 @@
 			playerBullet_array.splice(i,1);
 			i--;
 			console.log('bullet deleted');
+			socket.emit('del-bul',playerBullet_array);
 			}
 		}
 		}
