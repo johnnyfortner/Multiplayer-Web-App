@@ -1,4 +1,6 @@
-            var WINDOW_WIDTH = 1200;
+//this file is just a reference
+
+	    var WINDOW_WIDTH = 1200;
             var WINDOW_HEIGHT = 800;
 	
 	
