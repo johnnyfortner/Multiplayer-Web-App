@@ -71,11 +71,12 @@ io.on('connection', function(socket){
   socket.on('disconnect',function(state){
     delete players[socket.id];
     io.emit('update-players',players);
+	console.log("player",players[socket.id],"has left")
   }) 
   
   socket.on('del-bul',function(state){
-	  bullet_array=state;
-    io.emit('bullets-update',bullet_array);
+    io.emit('bullets-update',state);
+	console.log("logged:");
   }) 
   
   // Listen for move events and tell all other clients that something has moved 
@@ -97,6 +98,7 @@ io.on('connection', function(socket){
       console.log("Player",socket.id,"is cheating!");
     }
     bullet_array.push(new_bullet);
+	io.emit("bullets-update",bullet_array);
   });
 })
 
@@ -104,24 +106,26 @@ io.on('connection', function(socket){
 function ServerGameLoop(){
   for(var i=0;i<bullet_array.length;i++){
     var bullet = bullet_array[i];
-
-		bullet.x += bullet.speed_x; 
-		bullet.y += bullet.speed_y; 
 	  
-	
-	/*for(j=0;j<=water_tiles;j++){
-		//if(bullet.owner_id != id){
-		var a = water_tiles[j].x - bullet.x;
-		var b = water_tiles[j].y - bullet.y;
-		var dist = Math.hypot(a,b);
-		if(dist < 32){
-		bullet.destroy();
+	bullet.x += bullet.speed_x; 
+	bullet.y += bullet.speed_y; 
+
+	for(water_sprite in water_tiles)
+	/*for(var jj=0;jj<water_tiles;jj++)*/{
+	  if(bullet.owner_id != id){
+		var aa = water_tiles[water_sprite].x - bullet.x;
+		var bb = water_tiles[water_sprite].y - bullet.y;
+		var bdist = Math.hypot(aa,bb);
+		if(bdist < 32){
+		//bullet.speed_x = 0; 
+		//bullet.speed_y = 0; 
         bullet_array.splice(i,1);
         i--;
 		io.emit("bullets-update",bullet_array);
-		}    
-		//}
-	}*/
+		console.log("bullet collided with world");
+		}
+	  }
+	}
     
     // Check if this bullet is close enough to hit any player 
     for(var id in players){
@@ -138,8 +142,11 @@ function ServerGameLoop(){
     
     // Remove if it goes too far off screen 
     if(bullet.x < 0 || bullet.x > 2400 || bullet.y < 0 || bullet.y > 1600){
+		//bullet.destroy();
         bullet_array.splice(i,1);
         i--;
+		io.emit("bullets-update",bullet_array);
+		console.log("bullet deleted edge of screen")
     }
        
   }
