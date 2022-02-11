@@ -8,3 +8,5 @@
 * Other Player Muzzle Flash
 * Sometimes there's an extra bullet that doesn't move because its not in the array
 * Random Server crashes unkown due to lack of logging at the moment
+##### Redundancy:
+* Some code is in both client and server as it's halfway done being migrated from client side to server side scripting.
